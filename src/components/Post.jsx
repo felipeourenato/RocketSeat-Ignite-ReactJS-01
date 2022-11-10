@@ -30,6 +30,10 @@ export function Post({ author, content, publishedAt }) {
     setNewComment('');
   }
 
+  function deleteComment(cmt) {
+    setComments(comments.filter((comments) => comments !== cmt));
+  }
+
   return (
     <article className={styles.post}>
       <header>
@@ -53,9 +57,9 @@ export function Post({ author, content, publishedAt }) {
       <div className={styles.content}>
         {content.map((ctt) =>
           ctt.type === 'paragraph' ? (
-            <p>{ctt.content}</p>
+            <p key={ctt.line}>{ctt.content}</p>
           ) : (
-            <p>
+            <p key={ctt.line}>
               <a href="">{ctt.content}</a>
             </p>
           )
@@ -72,13 +76,15 @@ export function Post({ author, content, publishedAt }) {
           placeholder="Deixe um comentário"
         />
         <footer>
-          <button type="submit">Publicar</button>
+          <button disabled={!newComment} type="submit">
+            Publicar
+          </button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
         {comments.map((cmt) => (
-          <Comment content={cmt} />
+          <Comment key={cmt} content={cmt} onDeleteComment={deleteComment} />
         ))}
       </div>
     </article>
